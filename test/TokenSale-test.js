@@ -11,20 +11,20 @@ contract('TS', (accounts) => {
     var tokensAvailable = 7500; // 75% de la cantidad enviada como supply (10000)
     var numberOfTokens;
 
-    it('inizializa el contrato con el valor correcto', function () {
-        return TS.deployed().then(function (instance) {
-            tokenInstance = instance;
-            return tokenInstance.address
-        }).then(function (address) {
-            assert.notEqual(address, 0x0, 'has contract address');
-            return tokenInstance.tokenContract();
-        }).then(function (address) {
-            assert.notEqual(address, 0x0, 'has token contract address');
-            return tokenInstance.tokenPrice();
-        }).then(function (price) {
-            assert.equal(price, tokenPrice, 'token price is correct');
-        });
-    });
+    // it('inizializa el contrato con el valor correcto', function () {
+    //     return TS.deployed().then(function (instance) {
+    //         tokenInstance = instance;
+    //         return tokenInstance.address
+    //     }).then(function (address) {
+    //         assert.notEqual(address, 0x0, 'has contract address');
+    //         return tokenInstance.tokenContract();
+    //     }).then(function (address) {
+    //         assert.notEqual(address, 0x0, 'has token contract address');
+    //         return tokenInstance.tokenPrice();
+    //     }).then(function (price) {
+    //         assert.equal(price, tokenPrice, 'token price is correct');
+    //     });
+    // });
 
     it('facilitates token buying', function () {
         return ST.deployed()
@@ -35,7 +35,7 @@ contract('TS', (accounts) => {
             .then(function (instance) {
                 tokenSaleInstance = instance;
                 // da el 75% del totalsupply, llamando la funcion desde QuinoToken, y enviandoselo al contrato de TokenSale  
-                return tokenInstance.transfer(tokenSaleInstance.address, tokensAvailable, { from: admin })
+                return tokenInstance.transfer('0x9A944A79DbfAd28AFc261c97cC53147B5aa968Ee', 5000, { from: '0xD6F467bB61b44757941eC5C04811907c87ddE43D' })
             })
             .then(function (receipt) {
                 // compra 10 tokens
@@ -75,26 +75,26 @@ contract('TS', (accounts) => {
             });
     });
 
-    it('ends token sale', () => {
-        return ST.deployed()
-            .then(function (instance) {
-                tokenInstance = instance;
-                return TS.deployed();
-            })
-            .then(function (instance) {
-                tokenSaleInstance = instance;
-                // intenta terminar la venta sin ser el admin
-                return tokenSaleInstance.endSale({ from: buyer })
-            }).then(assert.fail).catch((err) => {
-                assert(err.message.indexOf('revert' >= 0, 'debe ser el admin'))
-                return tokenSaleInstance.endSale({ from: admin })
-            }).then((receipt) => {
-                return tokenInstance.balanceOf(admin)
-            }).then((balance) => {
-                assert.equal(balance.toNumber(), 9990, 'retorna lo tokens no vendidos')
-                return tokenSaleInstance.tokenPrice()
-            }).then((price) => {
-                assert.equal(price.toNumber(), 0, 'token price is empty')
-            })
-    })
+    // it('ends token sale', () => {
+    //     return ST.deployed()
+    //         .then(function (instance) {
+    //             tokenInstance = instance;
+    //             return TS.deployed();
+    //         })
+    //         .then(function (instance) {
+    //             tokenSaleInstance = instance;
+    //             // intenta terminar la venta sin ser el admin
+    //             return tokenSaleInstance.endSale({ from: buyer })
+    //         }).then(assert.fail).catch((err) => {
+    //             assert(err.message.indexOf('revert' >= 0, 'debe ser el admin'))
+    //             return tokenSaleInstance.endSale({ from: admin })
+    //         }).then((receipt) => {
+    //             return tokenInstance.balanceOf(admin)
+    //         }).then((balance) => {
+    //             assert.equal(balance.toNumber(), 9990, 'retorna lo tokens no vendidos')
+    //             return tokenSaleInstance.tokenPrice()
+    //         }).then((price) => {
+    //             assert.equal(price.toNumber(), 0, 'token price is empty')
+    //         })
+    // })
 })

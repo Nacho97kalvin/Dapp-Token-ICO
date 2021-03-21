@@ -2,35 +2,28 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import { Drizzle } from '@drizzle/store'
-import { DrizzleContext } from "@drizzle/react-plugin"
-import options from './DrizzleOptions.js'
+// import { Web3ReactProvider } from '@web3-react/core'
+// import { InjectedConnector } from '@web3-react/injected-connector'
+// import { NetworkConnector } from '@web3-react/network-connector'
 
-const drizzle = new Drizzle(options)
+
+// const injected = new InjectedConnector({ supportedChainIds: [5777] })  // conecta al id de la cadena de la wallet
+// const network = new NetworkConnector({ urls: { 5777: 'HTTP://127.0.0.1:7545' } })  // conector al nodo
+
+
+// function getLibrary(Provider, connector) {
+//   return new Web3Provider(Provider)
+// }
+
 
 
 ReactDOM.render(
   <React.StrictMode>
-    <DrizzleContext.Provider drizzle={drizzle}>
-      <DrizzleContext.Consumer>
-        {drizzleContext => {
-          const { drizzle, drizzleState, initialized } = drizzleContext;
-          if (!initialized) {
-            return "Loading..."
-          }
-
-          return (
-            <App drizzle={drizzle} drizzleState={drizzleState} />
-          )
-
-        }}
-      </DrizzleContext.Consumer>
-    </DrizzleContext.Provider>
+    {/* <Web3ReactProvider getLibrary={getLibrary}> */}
+    <App/>
+    {/* </Web3ReactProvider> */}
   </React.StrictMode>,
   document.getElementById('root')
 );
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 reportWebVitals();

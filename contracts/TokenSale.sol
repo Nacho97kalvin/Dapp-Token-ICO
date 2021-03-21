@@ -26,13 +26,10 @@ contract TokenSale {
     }
 
     function Multiply(uint256 x, uint256 y) internal pure returns (uint256 z) {
-        // verifica que el precio de tokens pedidos sea 0
-        //
         require(y == 0 || (z = x * y) / y == x);
     }
 
     function buyTokens(uint256 _numberOfTokens) public payable {
-        // es payable porq realiza una transaccion que transfiere ether
         require(msg.value == Multiply(_numberOfTokens, tokenPrice));
         // verifica que este contrato tenga la cantidad suficiente de tokens para vender obtenidos del balance del QuinoToken
         require(_numberOfTokens <= tokenContract.balanceOf(address(this)));
